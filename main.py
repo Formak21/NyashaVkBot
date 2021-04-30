@@ -32,6 +32,7 @@ v_kname = dict()
 StartedFrom = datetime.datetime
 LastRequest = datetime.datetime
 LastRequest2 = datetime.datetime
+LastRequest3 = datetime.datetime
 
 
 # database methods
@@ -152,6 +153,13 @@ def delay2() -> bool:
         LastRequest2 = datetime.datetime.now()
         return True
 
+def delay3() -> bool:
+    global LastRequest3
+    if datetime.datetime.now() - LastRequest3 < datetime.timedelta(minutes=2):
+        return False
+    else:
+        LastRequest3 = datetime.datetime.now()
+        return True
 
 def format_checker(oid, data) -> bool:
     if oid == 'name':
@@ -257,6 +265,10 @@ def send_credit_rd(uid):
 
 def send_warn_rd(uid):
     send(random.choice(MessagesDict['warn_rd']).format(check_name(uid)))
+
+
+def send_paste():
+    send(random.choice(MessagesDict['paste']))
 
 
 def send_all_notice():
@@ -371,6 +383,9 @@ def message_parser() -> dict:
         return {'Type': 'Genetaly', 'User_id': Message_Data['User_id']}
     elif '/hack' in Message_Data['Message'].lower() or '/взлом' in Message_Data['Message'].lower():
         return {'Type': 'hack', 'User_id': Message_Data['User_id']}
+    elif 'няша сосешь' in Message_Data['Message'].lower() or 'няша сосёшь' in Message_Data['Message'].lower() \
+            or 'няша соси' in Message_Data['Message'].lower() or 'няша пососи' in Message_Data['Message'].lower():
+        return {'Type': 'sucky', 'User_id': Message_Data['User_id']}
     elif 'setname' in Message_Data['Message'].lower() or 'сетнейм' in Message_Data['Message'].lower():
         if Message_Data['Reply']['Exist']:
             tmp = Message_Data['Reply']['User_id']
@@ -533,9 +548,11 @@ def main_loop():
     global StartedFrom
     global LastRequest
     global LastRequest2
+    global LastRequest3
     global v_kname
     log_add('Bot Started')
 
+    LastRequest3 = datetime.datetime.now()
     LastRequest2 = datetime.datetime.now()
     LastRequest = datetime.datetime.now()
     StartedFrom = datetime.datetime.now()
@@ -590,6 +607,12 @@ def main_loop():
                         elif parsed['Type'] == 'info':
                             send_info(parsed['User_id'])
                             log_add('info Successful')
+                        elif parsed['Type'] == 'sucky':
+                            if delay3() or check_perm(parsed['User_id']) == '*':
+                                send_paste()
+                            else:
+                                send('Ты блять сосешь да? Фаллос шоп ходячий...')
+                            log_add('Sucky Successful')
                         elif parsed['Type'] == 'debug':
                             send_debug()
                             log_add('Debug Successful')
