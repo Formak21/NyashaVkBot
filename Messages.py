@@ -45,7 +45,9 @@ MessagesDict = {'default': ['Чё надо {}?', 'Ась {}?', 'Слушаю, {}
                          'Я ваша верная подруга... пока...',
                          '''bolshoy brat vsegda sledit za toboy eto znachit chto ya mogu ''' +
                          '''vtorngutsya v tvou lichnuu jizn i ispolzovat vse toboy skazanoe protiv tebya -retardbot''',
-                         'Я просто кикаю петухов, что тебе от меня надо?'],
+                         'Я просто кикаю петухов, что тебе от меня надо?',
+                         'Я просто злоебущий бот который сведёт вас с ума, а мои сурсы туть:' +
+                         'https://github.com/Formak21/NyashaVkBot'],
                 'info_other': ['''Информация о {}: id:{}, Права:{}, Соц.Рейтинг:{} Варны:{}, Бан:{}'''],
                 'info_me': ['''Информация о тебе: 
                 Имя:{}, id:{}, Права:{}, Соц.Рейтинг:{}
