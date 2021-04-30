@@ -153,13 +153,15 @@ def delay2() -> bool:
         LastRequest2 = datetime.datetime.now()
         return True
 
+
 def delay3() -> bool:
     global LastRequest3
-    if datetime.datetime.now() - LastRequest3 < datetime.timedelta(minutes=2):
+    if datetime.datetime.now() - LastRequest3 < datetime.timedelta(seconds=30):
         return False
     else:
         LastRequest3 = datetime.datetime.now()
         return True
+
 
 def format_checker(oid, data) -> bool:
     if oid == 'name':
@@ -383,8 +385,10 @@ def message_parser() -> dict:
         return {'Type': 'Genetaly', 'User_id': Message_Data['User_id']}
     elif '/hack' in Message_Data['Message'].lower() or '/взлом' in Message_Data['Message'].lower():
         return {'Type': 'hack', 'User_id': Message_Data['User_id']}
-    elif 'няша сосешь' in Message_Data['Message'].lower() or 'няша сосёшь' in Message_Data['Message'].lower() \
-            or 'няша соси' in Message_Data['Message'].lower() or 'няша пососи' in Message_Data['Message'].lower():
+    elif 'няша сосешь' in Message_Data['Message'].lower() or 'няша нахуй' in Message_Data[
+        'Message'].lower() or 'няша сосёшь' in Message_Data['Message'].lower() or 'няша соси' in Message_Data[
+        'Message'].lower() or 'няша пососи' in Message_Data['Message'].lower() or 'няша хуй' in Message_Data[
+        'Message'].lower() or 'няша функционал' in Message_Data['Message'].lower():
         return {'Type': 'sucky', 'User_id': Message_Data['User_id']}
     elif 'setname' in Message_Data['Message'].lower() or 'сетнейм' in Message_Data['Message'].lower():
         if Message_Data['Reply']['Exist']:
