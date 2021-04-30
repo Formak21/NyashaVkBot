@@ -544,6 +544,9 @@ def if_auto_warn():
         send_warn_add(Message_Data['User_id'])
         set_warn(Message_Data['User_id'], check_warn(Message_Data['User_id']) + 1)
         log_add('Auto-Warn-Guard', 1)
+    elif 'функционал' in Message_Data['Message'] and delay3():
+        send('Понимаешь ли в чём дело, функционал - это математическая функция или главный герой романа Сергея Лукьяненко "Черновик". То, что ты подразумеваешь под этим словом, называется функциональность. Или какие-то новые правила русского языка придумали? Я не знаю. Я... Просто мои полномочия всё...')
+
 
 
 def main_loop():
