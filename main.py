@@ -35,6 +35,8 @@ LastRequest2 = datetime.datetime
 LastRequest3 = datetime.datetime
 
 LastRequest4 = datetime.datetime
+
+
 # database methods
 def get_db():
     global DataBase
@@ -137,6 +139,8 @@ def set_credit(uid, data):
 
 
 def delay() -> bool:
+    if check_perm(Message_Data['User_id']) == '*':
+        return True
     global LastRequest
     if datetime.datetime.now() - LastRequest < datetime.timedelta(seconds=1):
         return False
@@ -147,6 +151,8 @@ def delay() -> bool:
 
 def delay2() -> bool:
     global LastRequest2
+    if check_perm(Message_Data['User_id']) == '*':
+        return True
     if datetime.datetime.now() - LastRequest2 < datetime.timedelta(minutes=10):
         return False
     else:
@@ -155,6 +161,8 @@ def delay2() -> bool:
 
 
 def delay3() -> bool:
+    if check_perm(Message_Data['User_id']) == '*':
+        return True
     global LastRequest3
     if datetime.datetime.now() - LastRequest3 < datetime.timedelta(seconds=15):
         return False
@@ -162,13 +170,17 @@ def delay3() -> bool:
         LastRequest3 = datetime.datetime.now()
         return True
 
+
 def delay4() -> bool:
+    if check_perm(Message_Data['User_id']) == '*':
+        return True
     global LastRequest4
     if datetime.datetime.now() - LastRequest4 < datetime.timedelta(seconds=5):
         return False
     else:
         LastRequest4 = datetime.datetime.now()
         return True
+
 
 def format_checker(oid, data) -> bool:
     if oid == 'name':
@@ -576,12 +588,19 @@ def if_auto_warn():
         'Message'].lower() and delay3():
         send(
             'Понимаешь ли в чём дело, функционал - это математическая функция или главный герой романа Сергея Лукьяненко "Черновик". То, что ты подразумеваешь под этим словом, называется функциональность. Или какие-то новые правила русского языка придумали? Я не знаю. Я... Просто мои полномочия всё...')
-    if any([i in Message_Data['Message'].lower() for i in ['+', 'да согл', 'слит']]) and Message_Data['Reply']['User_id'] != Message_Data['User_id'] and delay4():
+    if Message_Data['Reply']['Exist'] and any(
+            [i in Message_Data['Message'].lower() for i in ['+', 'да согл', 'слит']]) and Message_Data['Reply'][
+        'User_id'] != Message_Data['User_id'] and delay4():
         set_credit(Message_Data['Reply']['User_id'], check_credit(Message_Data['Reply']['User_id']) + 1)
         send_credit_add(Message_Data['Reply']['User_id'])
-    if any([i in Message_Data['Message'].lower() for i in ['-', 'пошел нахуй', 'не согл']]) and Message_Data['Reply']['User_id'] != Message_Data['User_id'] and check_credit(Message_Data['User_id']) >= check_credit(Message_Data['Reply']['User_id']) and delay4():
+    if Message_Data['Reply']['Exist'] and any(
+            [i in Message_Data['Message'].lower() for i in ['-', 'пошел нахуй', 'не согл']]) and Message_Data['Reply'][
+        'User_id'] != Message_Data['User_id'] and check_credit(Message_Data['User_id']) >= check_credit(
+            Message_Data['Reply']['User_id']) and delay4():
         set_credit(Message_Data['Reply']['User_id'], check_credit(Message_Data['Reply']['User_id']) - 1)
         send_credit_rd(Message_Data['Reply']['User_id'])
+
+
 def main_loop():
     global Message_Data
     global MessagesCounter
@@ -598,6 +617,11 @@ def main_loop():
     LastRequest2 = datetime.datetime.now()
     LastRequest = datetime.datetime.now()
     StartedFrom = datetime.datetime.now()
+    get_db()
+    for i in DataBase.keys():
+        set_credit(i, 0)
+    set_db()
+
     for event in vk_lp.listen():
         if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat and event.message['from_id'] > 0:
             log_add('Executing started')
@@ -605,7 +629,7 @@ def main_loop():
                             'Message': event.message['text'], 'Reply': {'Exist': False, 'User_id': '-1'}}
             if 'reply_message' in event.message and event.message['reply_message']['from_id'] > 0:
                 Message_Data['Reply'] = {'Exist': True, 'User_id': str(event.message['reply_message']['from_id']),
-                                         'Message':str(event.message['reply_message']['text'])}
+                                         'Message': str(event.message['reply_message']['text'])}
             get_db()
             v_kname = vk_ses.method(method='users.get', values={'user_ids': int(Message_Data['User_id'])})[0]
             v_kname = {'last': v_kname['last_name'], 'first': v_kname['first_name']}
@@ -652,7 +676,7 @@ def main_loop():
                             log_add('info Successful')
                         elif parsed['Type'] == 'pasteadd':
                             with open('paste.txt', 'a', encoding='utf-8') as _f:
-                                _f.write('\n'+parsed['Paste'])
+                                _f.write('\n' + parsed['Paste'])
                             paste.append(parsed['Paste'])
                             send_success(parsed['User_id'])
                             log_add('Pastadd Successful')
