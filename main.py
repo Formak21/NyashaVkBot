@@ -34,7 +34,7 @@ LastRequest = datetime.datetime
 LastRequest2 = datetime.datetime
 LastRequest3 = datetime.datetime
 
-
+LastRequest4 = datetime.datetime
 # database methods
 def get_db():
     global DataBase
@@ -162,6 +162,13 @@ def delay3() -> bool:
         LastRequest3 = datetime.datetime.now()
         return True
 
+def delay4() -> bool:
+    global LastRequest4
+    if datetime.datetime.now() - LastRequest4 < datetime.timedelta(seconds=5):
+        return False
+    else:
+        LastRequest4 = datetime.datetime.now()
+        return True
 
 def format_checker(oid, data) -> bool:
     if oid == 'name':
@@ -318,7 +325,7 @@ def send_user_list():
 def send_credit_list():
     send(MessagesDict['credit_list'][0])
     for i in DataBase.keys():
-        if check_credit(i) > 0:
+        if check_credit(i) != 0:
             send(f'[id{i}|' + MessagesDict['credit_list'][1].format(check_name(i), i, check_credit(i)) + ']')
 
 
@@ -457,7 +464,9 @@ def message_parser() -> dict:
         elif 'петухи' in Message_Data['Message'].lower() or 'бан' in Message_Data['Message'].lower():
             return {'Type': req_admin('List_ban'), 'User_id': Message_Data['User_id']}
         elif 'варн' in Message_Data['Message'].lower():
-            return {'Type': req_admin('List_warn'), 'User_id': Message_Data['User_id']}
+            return {'Type': 'List_warn', 'User_id': Message_Data['User_id']}
+        elif 'кредит' in Message_Data['Message'].lower():
+            return {'Type': 'List_credit', 'User_id': Message_Data['User_id']}
         else:
             return {'Type': 'user_error', 'User_id': Message_Data['User_id']}
     elif 'тест' in Message_Data['Message'].lower():
@@ -567,8 +576,12 @@ def if_auto_warn():
         'Message'].lower() and delay3():
         send(
             'Понимаешь ли в чём дело, функционал - это математическая функция или главный герой романа Сергея Лукьяненко "Черновик". То, что ты подразумеваешь под этим словом, называется функциональность. Или какие-то новые правила русского языка придумали? Я не знаю. Я... Просто мои полномочия всё...')
-
-
+    if any([i in Message_Data['Message'].lower() for i in ['+', 'да согл', 'слит']]) and Message_Data['Reply']['User_id'] != Message_Data['User_id'] and delay4():
+        set_credit(Message_Data['Reply']['User_id'], check_credit(Message_Data['Reply']['User_id']) + 1)
+        send_credit_add(Message_Data['Reply']['User_id'])
+    if any([i in Message_Data['Message'].lower() for i in ['-', 'пошел нахуй', 'не согл']]) and Message_Data['Reply']['User_id'] != Message_Data['User_id'] and check_credit(Message_Data['User_id']) >= check_credit(Message_Data['Reply']['User_id']) and delay4():
+        set_credit(Message_Data['Reply']['User_id'], check_credit(Message_Data['Reply']['User_id']) - 1)
+        send_credit_rd(Message_Data['Reply']['User_id'])
 def main_loop():
     global Message_Data
     global MessagesCounter
@@ -576,9 +589,11 @@ def main_loop():
     global LastRequest
     global LastRequest2
     global LastRequest3
+    global LastRequest4
     global v_kname
     log_add('Bot Started')
 
+    LastRequest4 = datetime.datetime.now()
     LastRequest3 = datetime.datetime.now()
     LastRequest2 = datetime.datetime.now()
     LastRequest = datetime.datetime.now()
@@ -661,6 +676,9 @@ def main_loop():
                             log_add('List Successful')
                         elif parsed['Type'] == 'List_ban':
                             send_ban_list()
+                            log_add('List Successful')
+                        elif parsed['Type'] == 'List_credit':
+                            send_credit_list()
                             log_add('List Successful')
                         elif parsed['Type'] == 'help':
                             send_help(parsed['User_id'])
