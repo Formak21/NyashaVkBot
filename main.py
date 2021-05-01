@@ -620,6 +620,7 @@ def main_loop():
     get_db()
     for i in DataBase.keys():
         set_credit(i, 0)
+        set_warn(i, 0)
     set_db()
 
     for event in vk_lp.listen():

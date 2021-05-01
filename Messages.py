@@ -1,4 +1,4 @@
-VER = '1.0.2'
+VER = '1.0.3'
 NAME_U = 'Няша'
 NAME_L = 'няша'
 with open('paste.txt', 'r', encoding='utf-8') as _f:
