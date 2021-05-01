@@ -404,10 +404,10 @@ def message_parser() -> dict:
         return {'Type': 'Genetaly', 'User_id': Message_Data['User_id']}
     elif '/hack' in Message_Data['Message'].lower() or '/взлом' in Message_Data['Message'].lower():
         return {'Type': 'hack', 'User_id': Message_Data['User_id']}
-    elif 'няша сосешь' in Message_Data['Message'].lower() or 'няша нахуй' in Message_Data[
-        'Message'].lower() or 'няша сосёшь' in Message_Data['Message'].lower() or 'няша соси' in Message_Data[
-        'Message'].lower() or 'няша пососи' in Message_Data['Message'].lower() or 'няша хуй' in Message_Data[
-        'Message'].lower() or 'няша функционал' in Message_Data['Message'].lower():
+    elif NAME_L + ' сосешь' in Message_Data['Message'].lower() or NAME_L + ' нахуй' in Message_Data[
+        'Message'].lower() or NAME_L + ' сосёшь' in Message_Data['Message'].lower() or NAME_L + ' соси' in Message_Data[
+        'Message'].lower() or NAME_L + ' пососи' in Message_Data['Message'].lower() or NAME_L + ' хуй' in Message_Data[
+        'Message'].lower() or NAME_L + ' функционал' in Message_Data['Message'].lower():
         return {'Type': 'sucky', 'User_id': Message_Data['User_id']}
     elif 'setname' in Message_Data['Message'].lower() or 'сетнейм' in Message_Data['Message'].lower():
         if Message_Data['Reply']['Exist']:
