@@ -429,7 +429,7 @@ def message_parser() -> dict:
             tmp = Message_Data['Message'][len(NAME_L) + len(' добавь '):]
             tmp = str(tmp).replace('\n', ' ')
             tmp = str(tmp).replace('\t', ' ')
-            if tmp not in DataBase:
+            if tmp not in paste:
                 return {'Type': req_admin('pasteadd'), 'User_id': Message_Data['User_id'], 'Paste': tmp}
             else:
                 return {'Type': 'user_error', 'User_id': Message_Data['User_id']}
