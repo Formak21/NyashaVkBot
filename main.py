@@ -221,9 +221,15 @@ def up_time():
 
 
 # bot
-def send(message):
-    vk_ses.method(method='messages.send',
-                  values={'chat_id': Message_Data['Chat_id'], 'message': message, 'random_id': 0})
+def send(message, attachment=''):
+    if attachment != '':
+        print('s')
+        vk_ses.method(method='messages.send',
+                      values={'chat_id': Message_Data['Chat_id'], 'message': message, 'attachment': attachment,
+                              'random_id': 0})
+    else:
+        vk_ses.method(method='messages.send',
+                      values={'chat_id': Message_Data['Chat_id'], 'message': message, 'random_id': 0})
 
 
 def conf_ban(uid):
@@ -297,7 +303,7 @@ def send_all_notice():
 
 
 def send_help(uid):
-    send(random.choice(MessagesDict['help']) + f'[id{uid}|`]')
+    send(random.choice(MessagesDict['help']) + f'[id{uid}|`]', 'photo-204008487_457239018')
 
 
 def send_info(uid):
@@ -360,6 +366,14 @@ def unban(uid):
 
 
 def send_test():
+    upload = vk_api.VkUpload(vk_ses)
+    photo = upload.photo_messages('хуй.png')
+    owner_id = photo[0]['owner_id']
+    photo_id = photo[0]['id']
+    access_key = photo[0]['access_key']
+    attachment = f'photo{owner_id}_{photo_id}_{access_key}'
+    vk_ses.method(method='messages.send',
+                  values={'chat_id': 1, 'message': 'пикрил', 'attachment': attachment, 'random_id': 0})
     send_default(Message_Data['User_id'])
     send_delay_error(Message_Data['User_id'])
     send_user_error(Message_Data['User_id'])
@@ -596,7 +610,7 @@ def if_auto_warn():
     if Message_Data['Reply']['Exist'] and any(
             [i in Message_Data['Message'].lower() for i in ['-', 'пошел нахуй', 'не согл']]) and Message_Data['Reply'][
         'User_id'] != Message_Data['User_id'] and check_credit(Message_Data['User_id']) >= check_credit(
-            Message_Data['Reply']['User_id']) and delay4():
+        Message_Data['Reply']['User_id']) and delay4():
         set_credit(Message_Data['Reply']['User_id'], check_credit(Message_Data['Reply']['User_id']) - 1)
         send_credit_rd(Message_Data['Reply']['User_id'])
 
