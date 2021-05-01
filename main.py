@@ -435,7 +435,7 @@ def message_parser() -> dict:
                     'Admin_id': Message_Data['User_id']}
         else:
             return {'Type': req_admin('bot_error'), 'User_id': Message_Data['User_id']}
-    elif 'добавь' in Message_Data['Message'].lower():
+    elif NAME_L + ' добавь' == Message_Data['Message'].lower()[:len(NAME_L + ' добавь')]:
         if Message_Data['Reply']['Exist']:
             tmp = Message_Data['Reply']['Message']
             tmp = str(tmp).replace('\n', ' ')
