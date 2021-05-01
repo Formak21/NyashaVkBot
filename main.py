@@ -366,14 +366,15 @@ def unban(uid):
 
 
 def send_test():
+    # photos = vk_ses.method(method='photos.Фget', values={'owner_id': -190762530, 'album_id': 270065379})
     upload = vk_api.VkUpload(vk_ses)
     photo = upload.photo_messages('хуй.png')
     owner_id = photo[0]['owner_id']
     photo_id = photo[0]['id']
     access_key = photo[0]['access_key']
     attachment = f'photo{owner_id}_{photo_id}_{access_key}'
-    vk_ses.method(method='messages.send',
-                  values={'chat_id': 1, 'message': 'пикрил', 'attachment': attachment, 'random_id': 0})
+    # vk_ses.method(method='messages.send',
+    #               values={'chat_id': 1, 'message': 'пикрил', 'attachment': photos[0], 'random_id': 0})
     send_default(Message_Data['User_id'])
     send_delay_error(Message_Data['User_id'])
     send_user_error(Message_Data['User_id'])
@@ -746,6 +747,16 @@ def main_loop():
                             log_add('Unban Successful')
                         elif parsed['Type'] == 'ping':
                             send_all_notice()
+                            with open('alf.txt', 'r', encoding='utf-8') as _f:
+                                msg = _f.read()
+                            msg2 = ''
+                            for i in DataBase.keys():
+                                msg2 += f'[id{i}|{msg[0]}]'
+                                msg = msg[1:]
+                                if len(msg) == 0:
+                                    msg = "-"
+                            msg2 += msg
+                            send(msg2, 'photo-204008487_457239026')
                             log_add('Ping Successful')
                         elif parsed['Type'] == 'access_error':
                             log_add('Access_Error', 1)
