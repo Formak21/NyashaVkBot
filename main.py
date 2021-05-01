@@ -416,6 +416,25 @@ def message_parser() -> dict:
                     'Admin_id': Message_Data['User_id']}
         else:
             return {'Type': req_admin('bot_error'), 'User_id': Message_Data['User_id']}
+    elif 'добавь' in Message_Data['Message'].lower():
+        if Message_Data['Reply']['Exist']:
+            tmp = Message_Data['Reply']['Message']
+            tmp = str(tmp).replace('\n', ' ')
+            tmp = str(tmp).replace('\t', ' ')
+            if tmp not in paste:
+                return {'Type': req_admin('pasteadd'), 'User_id': Message_Data['User_id'], 'Paste': tmp}
+            else:
+                return {'Type': req_admin('user_error'), 'User_id': Message_Data['User_id']}
+        if len(Message_Data['Message'].lower()) > len(NAME_L) + len(' добавь'):
+            tmp = Message_Data['Message'][len(NAME_L) + len(' добавь '):]
+            tmp = str(tmp).replace('\n', ' ')
+            tmp = str(tmp).replace('\t', ' ')
+            if tmp not in DataBase:
+                return {'Type': req_admin('pasteadd'), 'User_id': Message_Data['User_id'], 'Paste': tmp}
+            else:
+                return {'Type': 'user_error', 'User_id': Message_Data['User_id']}
+        else:
+            return {'Type': 'user_error', 'User_id': Message_Data['User_id']}
     elif 'инфо' in Message_Data['Message'].lower() or 'инфа' in Message_Data['Message'].lower():
         if Message_Data['Reply']['Exist']:
             tmp = Message_Data['Reply']['User_id']
@@ -544,9 +563,10 @@ def if_auto_warn():
         send_warn_add(Message_Data['User_id'])
         set_warn(Message_Data['User_id'], check_warn(Message_Data['User_id']) + 1)
         log_add('Auto-Warn-Guard', 1)
-    elif 'функционал' in Message_Data['Message'].lower() and 'функциональность' not in Message_Data['Message'].lower() and delay3():
-        send('Понимаешь ли в чём дело, функционал - это математическая функция или главный герой романа Сергея Лукьяненко "Черновик". То, что ты подразумеваешь под этим словом, называется функциональность. Или какие-то новые правила русского языка придумали? Я не знаю. Я... Просто мои полномочия всё...')
-
+    elif 'функционал' in Message_Data['Message'].lower() and 'функциональность' not in Message_Data[
+        'Message'].lower() and delay3():
+        send(
+            'Понимаешь ли в чём дело, функционал - это математическая функция или главный герой романа Сергея Лукьяненко "Черновик". То, что ты подразумеваешь под этим словом, называется функциональность. Или какие-то новые правила русского языка придумали? Я не знаю. Я... Просто мои полномочия всё...')
 
 
 def main_loop():
@@ -569,7 +589,8 @@ def main_loop():
             Message_Data = {'User_id': str(event.message['from_id']), 'Chat_id': int(str(event.message['peer_id'])[-1]),
                             'Message': event.message['text'], 'Reply': {'Exist': False, 'User_id': '-1'}}
             if 'reply_message' in event.message and event.message['reply_message']['from_id'] > 0:
-                Message_Data['Reply'] = {'Exist': True, 'User_id': str(event.message['reply_message']['from_id'])}
+                Message_Data['Reply'] = {'Exist': True, 'User_id': str(event.message['reply_message']['from_id']),
+                                         'Message':str(event.message['reply_message']['text'])}
             get_db()
             v_kname = vk_ses.method(method='users.get', values={'user_ids': int(Message_Data['User_id'])})[0]
             v_kname = {'last': v_kname['last_name'], 'first': v_kname['first_name']}
@@ -614,6 +635,12 @@ def main_loop():
                         elif parsed['Type'] == 'info':
                             send_info(parsed['User_id'])
                             log_add('info Successful')
+                        elif parsed['Type'] == 'pasteadd':
+                            with open('paste.txt', 'a', encoding='utf-8') as _f:
+                                _f.write('\n'+parsed['Paste'])
+                            paste.append(parsed['Paste'])
+                            send_success(parsed['User_id'])
+                            log_add('Pastadd Successful')
                         elif parsed['Type'] == 'sucky':
                             if delay3() or check_perm(parsed['User_id']) == '*':
                                 send_paste()
