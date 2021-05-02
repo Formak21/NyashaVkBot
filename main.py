@@ -153,7 +153,7 @@ def delay2() -> bool:
     global LastRequest2
     if check_perm(Message_Data['User_id']) == '*':
         return True
-    if datetime.datetime.now() - LastRequest2 < datetime.timedelta(minutes=10):
+    if datetime.datetime.now() - LastRequest2 < datetime.timedelta(minutes=3):
         return False
     else:
         LastRequest2 = datetime.datetime.now()
@@ -424,16 +424,19 @@ def message_parser() -> dict:
         'Message'].lower() or NAME_L + ' пососи' in Message_Data['Message'].lower() or NAME_L + ' хуй' in Message_Data[
         'Message'].lower() or NAME_L + ' функционал' in Message_Data['Message'].lower():
         return {'Type': 'sucky', 'User_id': Message_Data['User_id']}
-    elif 'setname' in Message_Data['Message'].lower() or 'сетнейм' in Message_Data['Message'].lower():
+    elif NAME_L + ' setname' == Message_Data['Message'].lower()[:len(NAME_L + ' сетнейм')] or NAME_L + ' сетнейм' == Message_Data['Message'].lower()[:len(NAME_L + ' сетнейм')]:
+        type = str()
         if Message_Data['Reply']['Exist']:
             tmp = Message_Data['Reply']['User_id']
+            type = req_admin('set_name')
         else:
             tmp = Message_Data['User_id']
+            type = 'set_name'
         tmp2 = Message_Data['Message'][len(NAME_L) + len(' сетнейм '):]
         if not format_checker('name', tmp2):
             return {'Type': 'user_error', 'User_id': Message_Data['User_id']}
         if tmp in DataBase.keys():
-            return {'Type': req_admin('set_name'), 'User_id': tmp, 'Name': tmp2,
+            return {'Type': type, 'User_id': tmp, 'Name': tmp2,
                     'Admin_id': Message_Data['User_id']}
         else:
             return {'Type': req_admin('bot_error'), 'User_id': Message_Data['User_id']}
