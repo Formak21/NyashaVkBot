@@ -673,7 +673,7 @@ def main_loop():
                             log_add('default Successful')
                         elif parsed['Type'] == 'Genetaly':
                             send(
-                                f'@id181693538 ( пингую гениталия сосаля ) @id646897493 (и его педальную) @id202197700 ( бригаду. по просьбе {check_name(parsed["User_id"])}а )')
+                                f'@id181693538 ( пингую гениталия сосаля ) @id646897493 (и его педальную) @id202197700 ( бригаду. по просьбе {check_name(parsed["User_id"])}а )', 'audio492569185_456240218')
                             log_add('User_Ping(Tsal) Successful')
                         elif parsed['Type'] == 'hack':
                             if delay2():
