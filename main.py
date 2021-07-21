@@ -295,7 +295,12 @@ def send_warn_rd(uid):
 
 
 def send_paste():
-    send(random.choice(MessagesDict['paste']))
+    tmp = random.choice(MessagesDict['paste'])
+    if len(tmp) > 4095:
+        while len(tmp) > 4095:
+            send(tmp[:4095])
+            tmp = tmp[4095:]
+    send(tmp)
 
 
 def send_all_notice():
@@ -330,8 +335,7 @@ def send_ban_list():
     send(MessagesDict['ban_list'][0])
     for i in DataBase.keys():
         if check_banned(i):
-            send(f'[id{i}|' + MessagesDict['ban_list'][1].format(check_name(i), i, check_name(check_banned(i)[3]),
-                                                                 check_banned(i)[2]) + ']')
+            send(f'[id{i}|' + MessagesDict['ban_list'][1].format(check_name(i), i) + ']')
 
 
 def send_user_list():
