@@ -1,8 +1,6 @@
 from subprocess import Popen
-import sys
 
-filename = 'main.py'
 while True:
-    print("\nStarting " + filename)
-    p = Popen("python " + filename, shell=True)
+    print("\nStarted.")
+    p = Popen("python main.py", shell=True)
     p.wait()
