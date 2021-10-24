@@ -66,7 +66,7 @@ Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 AdminIds = {492569185, 384341109}
 
 # Ver
-Ver = "3.4.0a2"
+Ver = "3.4.0a2_1S"
 
 # Flags
 Flags = {
@@ -491,7 +491,7 @@ while True:
 
     except Exception:
         if str(sys.exc_info()[1]) == 'Restart':
-            print('Hard Restarting...')
+            print('Hard Restarting...', datetime.now())
             raise Exception('Restart')
         Counters['ExceptionFalls'] += 1
-        print('Exception, restarting.',  sys.exc_info(), sep='\n')
+        print('Exception, restarting.'+ str(datetime.now()),  sys.exc_info(), sep='\n')
