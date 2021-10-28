@@ -66,7 +66,7 @@ Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 AdminIds = {492569185, 384341109}
 
 # Ver
-Ver = "3.4.0a2_1S"
+Ver = "3.4.0a2_1"
 
 # Flags
 Flags = {
