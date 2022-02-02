@@ -2,5 +2,5 @@
 .idea
 venv
 __pycache__
-Data\API_KEY.txt
-Data\paste.txt
+Data/API_KEY.txt
+Data/paste.txt
