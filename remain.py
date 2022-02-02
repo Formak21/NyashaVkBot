@@ -8,24 +8,27 @@ import sys
 
 # Service
 ID = "204008487"
-API = "api_key"
+API = ""
+with open('API_KEY.txt', 'r', encoding='utf-8') as _f:
+    API = _f.read()
 vk_ses = vk_api.VkApi(token=API)
 vk_lp = VkBotLongPoll(vk_ses, ID)
 
 # Tags
 Tags = {
-    'Bot': {'няша', 'няшенька', 'няшуля', 'nyasha', 'nyashulya', 'nyashenka'},
-    'XiGet': {'xi', 'хи', 'си'},
+    'Bot': {'няша', 'няшенька', 'няшуля', 'nyasha', 'nyashulya', 'nyashenka', 'няшулечка', 'nyashulechka'},
+    'XiGet': {'xi', 'хи', 'си', 'кси', 'кхи', 'si', 'ksi'},
     'CrazyGet': {'крз', 'крейзи', 'crazy', 'crz', 'krz', 'krazy', 'крэйзи'},
     'LeetGet': {'лит', 'лиит', 'леет', 'leet', 'elite', '1337'},
     'PasteGet': {'хуй', 'xyi', 'хой', 'huy'},
-    'XyiGet': {'хуефик', 'хуефиц', 'хуефицировать',
-            'хуефикатор',  'хуефицируй', 'xiyefic', 'xiyefits', 'xiyefik', 'xiyeficator',
-            'xiyefikator', 'xiyefitsiruy', 'xiyefitsitovat', 'huyefic', 'huyefits', 'huyefik', 'huyeficator',
-            'huyefikator', 'huyefitsiruy', 'huyefitsitovat', 'хфц', 'hfc', 'xfc', 'hfts', 'xfts', 'хфк'},
+    'XyiGet': {'хуефик', 'хуефиц', 'хуефицировать', 'хуефикатор',  'хуефицируй',
+               'xiyefic', 'xiyefits', 'xiyefik', 'xiyeficator', 'xiyefikator',
+               'xiyefitsiruy', 'xiyefitsitovat', 'huyefic', 'huyefits', 'huyefik',
+               'huyeficator', 'huyefikator', 'huyefitsiruy', 'huyefitsitovat',
+               'хфц', 'hfc', 'xfc', 'hfts', 'xfts', 'хфк'},
     'PasteAdd': {'добавь', 'add'},
     'PingGet': {'маяк', 'пинг', 'алл', 'олл', 'пидорасы', 'mayak', 'ping', 'all', 'pidorasi'},
-    'HelpGet': {'help', 'хелп', 'помощь', 'хэлп'},
+    'HelpGet': {'help', 'хелп', 'помощь', 'хэлп', 'halp', 'plshalp', 'памагитипж', 'памагити'},
     'InfoGet': {'info', 'инфо', 'инфа', 'infa', 'чеэтозапидорасебучий'},
     'DebugGet': {'debug',  'дебаг', 'дэбаг'},
     'EnableSet': {'en', 'ен', 'эн', 'вкл', 'enable', 'включить'},
@@ -35,12 +38,16 @@ Tags = {
 
 # Messages
 BotMessages = {
-    'global_message': ['Че надо?', 'Ась?', 'Что тебе нужно?', 'А?', 'Что?', 'Ну че?', ],
-    'success_message': ['Выполнено.', 'Готово.', 'Сделано.', 'Успех.', 'Обработала.', 'Всё сделала.'],
-    'user_error_message': ['Ты еблан.', 'Ты утюг ебаный.', 'Ты тупой.', 'Ты мудак.', 'Ты долбаеб.', 
-                    'Ты еблоид.', 'Отстань.', 'Отъебись.', 'Исчезни, уеба.', 'Ты туп как депутат.'],
+    'global_message': ['Че надо?', 'Ась?', 'Что тебе нужно?', 'А?', 'Что?', 'Ну че?', 'Слушаю?'],
+    'success_message': ['Выполнено.', 'Выполнила.', 'Готово.', 'Сделано.', 'Успех.', 'Обработала.',
+                        'Всё сделала.', 'Сама справилась.'],
+    'user_error_message': ['Ты еблан.', 'Ты утюг ебаный.', 'Ты тупой.', 'Ты мудак.', 'Ты долбаеб.',
+                           'Ты еблоид.', 'Отстань.', 'Отъебись.', 'Исчезни, уеба.', 'Ты туп как депутат.',
+                           'Пиздец... Как ты до своих лет то дожил?', 'Ох... Я ебала... Тупорылый бля...'],
     'delay_message': ['Подожди ты уеба...', 'Кулдаун блять, уебище.', 'Не так быстро, мудень.',
-                    'Жди бля, уебок.', 'Хули ты такой быстрый? Как вода блять в унитазе.'],
+                      'Жди бля, уебок.', 'Хули ты такой быстрый? Как вода блять в унитазе.',
+                      'ЯМЕТЕ КУДАСААИИ~!! АХхх~~~! Притормози Сенпай! Ну че, как подрочил, уебок?',
+                      'Жди.'],
     'ping_message': ['Pinging @all [127.0.0.1] with 32 bytes of data:', ''],
     'help_message': '',
     'debug_message': '',
@@ -63,10 +70,10 @@ with open('Data/debug.txt', 'r', encoding='utf-8') as _f:
 Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 
 # AdminIds
-AdminIds = {492569185, 384341109}
+AdminIds = {492569185, 384341109, 551709213}
 
 # Ver
-Ver = "3.4.0a2_1"
+Ver = "3.4.0a2_3"
 
 # Flags
 Flags = {
@@ -115,6 +122,7 @@ message = dict()
 
 # Vk Funcs
 
+
 def isUser(id_or_message_tmp) -> bool:
     if type(id_or_message_tmp) != int:
         return 'from_id' in id_or_message_tmp.keys() and id_or_message_tmp['from_id'] >= 0
@@ -143,11 +151,13 @@ def howManyAttachments(message_tmp) -> int:
 
 def returnAttachmentIds(message_tmp) -> dict:
     attachments = dict()
-    for i in message_tmp['attachments']:
-        if i['type'] in attachments:
-            attachments[i['type']].add(i['type'] + str(i[i['type']]['owner_id']) + '_' + str(i[i['type']]['id']))
+    for data in message_tmp['attachments']:
+        if data['type'] in attachments:
+            attachments[data['type']].add(data['type'] + str(data[data['type']]['owner_id']) + '_' +
+                                          str(data[data['type']]['id']))
         else:
-            attachments[i['type']] = {i['type'] + str(i[i['type']]['owner_id']) + '_' + str(i[i['type']]['id'])}
+            attachments[data['type']] = {data['type'] + str(data[data['type']]['owner_id']) + '_' +
+                                         str(data[data['type']]['id'])}
     return attachments
 
 
@@ -230,15 +240,15 @@ def getPingText() -> list:
     return text
 
 
-def getXiText(text_tmp, ver=3) -> str:
+def getXiText(text_tmp, tver=3) -> str:
     if len(text_tmp) > Limits['XiGet']['Request']:
         text_tmp = text_tmp[:Limits['XiGet']['Request']+1]
-    text_tmp = Translators[ver].translate(text_tmp, dest='zh-tw').text
-    text_tmp = Translators[ver].translate(text_tmp, dest='en').text
-    text_tmp = Translators[ver].translate(text_tmp, dest='zh-tw').text
-    text_tmp = Translators[ver].translate(text_tmp, dest='ru').text
+    text_tmp = Translators[tver].translate(text_tmp, dest='zh-tw').text
+    text_tmp = Translators[tver].translate(text_tmp, dest='en').text
+    text_tmp = Translators[tver].translate(text_tmp, dest='zh-tw').text
+    text_tmp = Translators[tver].translate(text_tmp, dest='ru').text
     if len(text_tmp) > Limits['XiGet']['Answer']:
-       text_tmp = text_tmp[:Limits['XiGet']['Answer']+1]
+        text_tmp = text_tmp[:Limits['XiGet']['Answer']+1]
     return text_tmp
 
 
@@ -436,19 +446,19 @@ while True:
                 if preparsed[1].lower() in Tags['DebugGet'] and message['from_id'] in AdminIds:
                     print('DebugGet')
                     sendMessage(BotMessages['debug_message'].format(
-                    Ver, Started, (datetime.now()-Started).seconds, len(paste), 
-                    str(Counters['Global']), str(Counters['XiGet']), str(Counters['CrazyGet']),
-                    str(Counters['PasteGet']), str(Counters['XyiGet']), str(Counters['PasteAdd']),
-                    str(Counters['PingGet']), str(Counters['HelpGet']), str(Counters['LeetGet']),
-                    str(int(not (datetime.now() - Timings['Global']['Request'] > Timings['Global']['Delay']))),
-                    str(int(not (datetime.now() - Timings['XiGet']['Request'] > Timings['XiGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['CrazyGet']['Request'] > Timings['CrazyGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['PasteGet']['Request'] > Timings['PasteGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['XyiGet']['Request'] > Timings['XyiGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['PingGet']['Request'] > Timings['PingGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['HelpGet']['Request'] > Timings['HelpGet']['Delay']))),
-                    str(int(not (datetime.now() - Timings['LeetGet']['Request'] > Timings['LeetGet']['Delay']))),
-                    str(Counters['ExceptionFalls']), str(len(AdminIds)), str(int(Flags['isDisabled']))))
+                        Ver, Started, (datetime.now()-Started).seconds, len(paste),
+                        str(Counters['Global']), str(Counters['XiGet']), str(Counters['CrazyGet']),
+                        str(Counters['PasteGet']), str(Counters['XyiGet']), str(Counters['PasteAdd']),
+                        str(Counters['PingGet']), str(Counters['HelpGet']), str(Counters['LeetGet']),
+                        str(int(not (datetime.now() - Timings['Global']['Request'] > Timings['Global']['Delay']))),
+                        str(int(not (datetime.now() - Timings['XiGet']['Request'] > Timings['XiGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['CrazyGet']['Request'] > Timings['CrazyGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['PasteGet']['Request'] > Timings['PasteGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['XyiGet']['Request'] > Timings['XyiGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['PingGet']['Request'] > Timings['PingGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['HelpGet']['Request'] > Timings['HelpGet']['Delay']))),
+                        str(int(not (datetime.now() - Timings['LeetGet']['Request'] > Timings['LeetGet']['Delay']))),
+                        str(Counters['ExceptionFalls']), str(len(AdminIds)), str(int(Flags['isDisabled']))))
                     continue
 
                 # InfoGet
@@ -465,7 +475,8 @@ while True:
                         type_tmp = isUser(id_tmp)
                         if type_tmp:
                             username_tmp = returnVkName(id_tmp)
-                    sendMessage(BotMessages['info_message'].format(['Group', 'User'][type_tmp], username_tmp, str(id_tmp), str(int(id_tmp in AdminIds))))
+                    sendMessage(BotMessages['info_message'].format(['Group', 'User'][type_tmp], username_tmp,
+                                                                   str(id_tmp), str(int(id_tmp in AdminIds))))
                     continue
 
                 # EnableSet
@@ -487,11 +498,10 @@ while True:
                     print('RestartGet')
                     sendMessage(random.choice(BotMessages['success_message']))
                     raise Exception("Restart")
-                    continue
 
     except Exception:
         if str(sys.exc_info()[1]) == 'Restart':
             print('Hard Restarting...', datetime.now())
             raise Exception('Restart')
         Counters['ExceptionFalls'] += 1
-        print('Exception, restarting.'+ str(datetime.now()),  sys.exc_info(), sep='\n')
+        print('Exception, restarting.' + str(datetime.now()),  sys.exc_info(), sep='\n')
