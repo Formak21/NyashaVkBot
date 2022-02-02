@@ -446,7 +446,7 @@ while True:
                 if preparsed[1].lower() in Tags['DebugGet'] and message['from_id'] in AdminIds:
                     print('DebugGet')
                     sendMessage(BotMessages['debug_message'].format(
-                        Ver, Started, (datetime.now()-Started).seconds, len(paste),
+                        Ver, Started.strftime('%d.%m.%Y в %H:%M:%S'), (datetime.now()-Started).seconds, len(paste),
                         str(Counters['Global']), str(Counters['XiGet']), str(Counters['CrazyGet']),
                         str(Counters['PasteGet']), str(Counters['XyiGet']), str(Counters['PasteAdd']),
                         str(Counters['PingGet']), str(Counters['HelpGet']), str(Counters['LeetGet']),
@@ -504,4 +504,4 @@ while True:
             print('Hard Restarting...', datetime.now())
             raise Exception('Restart')
         Counters['ExceptionFalls'] += 1
-        print('Exception, restarting.' + str(datetime.now()),  sys.exc_info(), sep='\n')
+        print('Exception, restarting.' + str(datetime.now().strftime('%d.%m.%Y-%H:%M:%S')),  sys.exc_info(), sep='\n')
