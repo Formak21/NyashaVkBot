@@ -1,0 +1,6 @@
+.DS_Store
+.idea
+venv
+__pycache__
+Data/API_KEY.txt
+Data/paste.txt

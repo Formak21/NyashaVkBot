@@ -9,7 +9,7 @@ import sys
 # Service
 ID = "204008487"
 API = ""
-with open('API_KEY.txt', 'r', encoding='utf-8') as _f:
+with open('Data/API_KEY.txt', 'r', encoding='utf-8') as _f:
     API = _f.read()
 vk_ses = vk_api.VkApi(token=API)
 vk_lp = VkBotLongPoll(vk_ses, ID)
@@ -73,7 +73,7 @@ Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 AdminIds = {492569185, 384341109, 551709213}
 
 # Ver
-Ver = "3.4.0a2_3"
+Ver = "3.4.0a2_4"
 
 # Flags
 Flags = {
@@ -348,11 +348,11 @@ while True:
                     if len(preparsed) > 2 and preparsed[2] in {'3', '4'}:
                         ver = int(preparsed[2])
                         preparsed.remove(preparsed[2])
-                    
+
                     if len(preparsed) > 2:
                         preparsed = ' '.join(preparsed[2:])
                         sendMessage(getXiText(preparsed, ver))
-                    elif isReplyExist(message):
+                    elif isReplyExist(message) and isTextExist(message['reply_message']):
                         preparsed = message['reply_message']['text']
                         sendMessage(getXiText(preparsed, ver))
                     else:
@@ -366,7 +366,7 @@ while True:
                     if len(preparsed) > 2:
                         preparsed = ' '.join(preparsed[2:])
                         sendMessage(getXyiText(preparsed))
-                    elif isReplyExist(message):
+                    elif isReplyExist(message) and isTextExist(message['reply_message']):
                         preparsed = message['reply_message']['text']
                         sendMessage(getXyiText(preparsed))
                     else:
@@ -380,7 +380,7 @@ while True:
                     if len(preparsed) > 2:
                         preparsed = ' '.join(preparsed[2:])
                         sendMessage(getCrazyText(preparsed))
-                    elif isReplyExist(message):
+                    elif isReplyExist(message) and isTextExist(message['reply_message']):
                         preparsed = message['reply_message']['text']
                         sendMessage(getCrazyText(preparsed))
                     else:
@@ -394,7 +394,7 @@ while True:
                     if len(preparsed) > 2:
                         preparsed = ' '.join(preparsed[2:])
                         sendMessage(getLeetText(preparsed))
-                    elif isReplyExist(message):
+                    elif isReplyExist(message) and isTextExist(message['reply_message']):
                         preparsed = message['reply_message']['text']
                         sendMessage(getLeetText(preparsed))
                     else:
@@ -415,7 +415,7 @@ while True:
                     print('PasteAdd')
                     if len(preparsed) > 2:
                         preparsed = ' '.join(preparsed[2:])
-                    elif isReplyExist(message):
+                    elif isReplyExist(message) and isTextExist(message['reply_message']):
                         preparsed = message['reply_message']['text']
                     else:
                         sendMessage(random.choice(BotMessages['user_error_message']))
