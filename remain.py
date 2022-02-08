@@ -7,10 +7,8 @@ import googletrans4
 import sys
 
 # Service
-ID = "204008487"
-API = ""
 with open('Data/API_KEY.txt', 'r', encoding='utf-8') as _f:
-    API = _f.read()
+    ID, API = _f.read().splitlines()
 vk_ses = vk_api.VkApi(token=API)
 vk_lp = VkBotLongPoll(vk_ses, ID)
 
@@ -21,16 +19,16 @@ Tags = {
     'CrazyGet': {'крз', 'крейзи', 'crazy', 'crz', 'krz', 'krazy', 'крэйзи'},
     'LeetGet': {'лит', 'лиит', 'леет', 'leet', 'elite', '1337'},
     'PasteGet': {'хуй', 'xyi', 'хой', 'huy'},
-    'XyiGet': {'хуефик', 'хуефиц', 'хуефицировать', 'хуефикатор',  'хуефицируй',
+    'XyiGet': {'хуефик', 'хуефиц', 'хуефицировать', 'хуефикатор', 'хуефицируй',
                'xiyefic', 'xiyefits', 'xiyefik', 'xiyeficator', 'xiyefikator',
                'xiyefitsiruy', 'xiyefitsitovat', 'huyefic', 'huyefits', 'huyefik',
                'huyeficator', 'huyefikator', 'huyefitsiruy', 'huyefitsitovat',
                'хфц', 'hfc', 'xfc', 'hfts', 'xfts', 'хфк'},
-    'PasteAdd': {'добавь', 'add'},
+    'PasteAdd': {'добавь', 'add', 'save', 'сохр', 'сохрани'},
     'PingGet': {'маяк', 'пинг', 'алл', 'олл', 'пидорасы', 'mayak', 'ping', 'all', 'pidorasi'},
     'HelpGet': {'help', 'хелп', 'помощь', 'хэлп', 'halp', 'plshalp', 'памагитипж', 'памагити'},
     'InfoGet': {'info', 'инфо', 'инфа', 'infa', 'чеэтозапидорасебучий'},
-    'DebugGet': {'debug',  'дебаг', 'дэбаг'},
+    'DebugGet': {'debug', 'дебаг', 'дэбаг'},
     'EnableSet': {'en', 'ен', 'эн', 'вкл', 'enable', 'включить'},
     'DisableSet': {'dis', 'диз', 'выкл', 'disable', 'выключить'},
     'RestartGet': {'restart', 'рестарт'}
@@ -73,7 +71,7 @@ Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 AdminIds = {492569185, 384341109, 551709213}
 
 # Ver
-Ver = "3.4.0a2_4"
+Ver = "3.4.0a2_5"
 
 # Flags
 Flags = {
@@ -119,6 +117,7 @@ Limits = {
 
 # Global vars
 message = dict()
+
 
 # Vk Funcs
 
@@ -169,6 +168,13 @@ def returnVkName(id_or_message_tmp) -> str:
                    vk_ses.method(method='users.get', values={'user_ids': id_or_message_tmp['from_id']})[0]['last_name']
     return vk_ses.method(method='users.get', values={'user_ids': id_or_message_tmp})[0]['first_name'] + ' ' + \
            vk_ses.method(method='users.get', values={'user_ids': id_or_message_tmp})[0]['last_name']
+
+
+def returnVkGroupName(id_or_message_tmp) -> str:
+    if type(id_or_message_tmp) == dict:
+        if 'from_id' in id_or_message_tmp.keys():
+            return vk_ses.method(method='groups.getById', values={'group_id': id_or_message_tmp['from_id']})['name']
+    return vk_ses.method(method='users.get', values={'group_id': id_or_message_tmp})['name']
 
 
 def returnConfMembers() -> dict:
@@ -242,19 +248,19 @@ def getPingText() -> list:
 
 def getXiText(text_tmp, tver=3) -> str:
     if len(text_tmp) > Limits['XiGet']['Request']:
-        text_tmp = text_tmp[:Limits['XiGet']['Request']+1]
+        text_tmp = text_tmp[:Limits['XiGet']['Request'] + 1]
     text_tmp = Translators[tver].translate(text_tmp, dest='zh-tw').text
     text_tmp = Translators[tver].translate(text_tmp, dest='en').text
     text_tmp = Translators[tver].translate(text_tmp, dest='zh-tw').text
     text_tmp = Translators[tver].translate(text_tmp, dest='ru').text
     if len(text_tmp) > Limits['XiGet']['Answer']:
-        text_tmp = text_tmp[:Limits['XiGet']['Answer']+1]
+        text_tmp = text_tmp[:Limits['XiGet']['Answer'] + 1]
     return text_tmp
 
 
 def getXyiText(text_tmp) -> str:
     if len(text_tmp) > Limits['XyiGet']['Request']:
-        text_tmp = text_tmp[:Limits['XyiGet']['Request']+1]
+        text_tmp = text_tmp[:Limits['XyiGet']['Request'] + 1]
     dic = {'а': 'хуя', 'е': 'хуе', 'ё': 'хуё',
            'и': 'хуи', 'о': 'хуё', 'у': 'хую',
            'э': 'хуе', 'ю': 'хую', 'я': 'хуя', 'ы': 'хуи',
@@ -275,13 +281,13 @@ def getXyiText(text_tmp) -> str:
                     break
     text_tmp = '\n'.join([' '.join(k) for k in text_tmp])
     if len(text_tmp) > Limits['XyiGet']['Answer']:
-        text_tmp = text_tmp[:Limits['XyiGet']['Answer']+1]
+        text_tmp = text_tmp[:Limits['XyiGet']['Answer'] + 1]
     return text_tmp
 
 
 def getLeetText(text_tmp) -> str:
     if len(text_tmp) > Limits['LeetGet']['Request']:
-        text_tmp = text_tmp[:Limits['LeetGet']['Request']+1]
+        text_tmp = text_tmp[:Limits['LeetGet']['Request'] + 1]
     from leet import dic
     text_tmp = text_tmp.lower()
     text_tmp = list(text_tmp)
@@ -290,13 +296,13 @@ def getLeetText(text_tmp) -> str:
             text_tmp[k] = random.choice(list(dic[text_tmp[k]]))
     text_tmp = ' '.join(text_tmp)
     if len(text_tmp) > Limits['LeetGet']['Answer']:
-        text_tmp = text_tmp[:Limits['LeetGet']['Answer']+1]
+        text_tmp = text_tmp[:Limits['LeetGet']['Answer'] + 1]
     return text_tmp
 
 
 def getCrazyText(text_tmp) -> str:
     if len(text_tmp) > Limits['CrazyGet']['Request']:
-        text_tmp = text_tmp[:Limits['CrazyGet']['Request']+1]
+        text_tmp = text_tmp[:Limits['CrazyGet']['Request'] + 1]
     UpLetter = True
     text_tmp = text_tmp.lower()
     text_tmp = list(text_tmp)
@@ -309,16 +315,16 @@ def getCrazyText(text_tmp) -> str:
                 UpLetter = True
     text_tmp = ''.join(text_tmp)
     if len(text_tmp) > Limits['CrazyGet']['Answer']:
-        text_tmp = text_tmp[:Limits['CrazyGet']['Answer']+1]
+        text_tmp = text_tmp[:Limits['CrazyGet']['Answer'] + 1]
     return text_tmp
-        
+
 
 while True:
     try:
         for event in vk_lp.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
                 message = event.message
-                
+
                 if not isTextExist(message):
                     continue
                 if Flags['isDisabled'] and not (message['from_id'] in AdminIds):
@@ -326,7 +332,7 @@ while True:
 
                 # Split by ' ' for parsing requests
                 preparsed = message['text'].split(' ')
-                
+
                 if preparsed[0].lower() not in Tags['Bot']:
                     continue
                 Counters['Global'] += 1
@@ -336,7 +342,7 @@ while True:
                     if random.choice([True, False, False, False]):
                         sendMessage(random.choice(list(BotMessages['global_message'])))
                     continue
-                
+
                 # Computing Functions
 
                 # XiGet
@@ -358,7 +364,7 @@ while True:
                     else:
                         sendMessage(random.choice(BotMessages['user_error_message']))
                     continue
-                
+
                 # XyiGet
                 if preparsed[1].lower() in Tags['XyiGet'] and checkTimings('XyiGet'):
                     Counters['XyiGet'] += 1
@@ -446,7 +452,7 @@ while True:
                 if preparsed[1].lower() in Tags['DebugGet'] and message['from_id'] in AdminIds:
                     print('DebugGet')
                     sendMessage(BotMessages['debug_message'].format(
-                        Ver, Started.strftime('%d.%m.%Y в %H:%M:%S'), (datetime.now()-Started).seconds, len(paste),
+                        Ver, Started.strftime('%d.%m.%Y в %H:%M:%S'), (datetime.now() - Started).seconds, len(paste),
                         str(Counters['Global']), str(Counters['XiGet']), str(Counters['CrazyGet']),
                         str(Counters['PasteGet']), str(Counters['XyiGet']), str(Counters['PasteAdd']),
                         str(Counters['PingGet']), str(Counters['HelpGet']), str(Counters['LeetGet']),
@@ -475,6 +481,8 @@ while True:
                         type_tmp = isUser(id_tmp)
                         if type_tmp:
                             username_tmp = returnVkName(id_tmp)
+                        else:
+                            username_tmp = returnVkGroupName(id_tmp)
                     sendMessage(BotMessages['info_message'].format(['Group', 'User'][type_tmp], username_tmp,
                                                                    str(id_tmp), str(int(id_tmp in AdminIds))))
                     continue
@@ -504,4 +512,4 @@ while True:
             print('Hard Restarting...', datetime.now())
             raise Exception('Restart')
         Counters['ExceptionFalls'] += 1
-        print('Exception, restarting.' + str(datetime.now().strftime('%d.%m.%Y-%H:%M:%S')),  sys.exc_info(), sep='\n')
+        print('Exception, restarting.' + str(datetime.now().strftime('%d.%m.%Y-%H:%M:%S')), sys.exc_info(), sep='\n')
