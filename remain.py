@@ -69,6 +69,7 @@ Translators = {3: googletrans3.Translator(), 4: googletrans4.Translator()}
 
 # AdminIds
 AdminIds = {492569185, 384341109, 551709213}
+BannedIds = {}
 
 # Ver
 Ver = "3.4.0a2_5"
@@ -173,8 +174,8 @@ def returnVkName(id_or_message_tmp) -> str:
 def returnVkGroupName(id_or_message_tmp) -> str:
     if type(id_or_message_tmp) == dict:
         if 'from_id' in id_or_message_tmp.keys():
-            return vk_ses.method(method='groups.getById', values={'group_id': id_or_message_tmp['from_id']})['name']
-    return vk_ses.method(method='users.get', values={'group_id': id_or_message_tmp})['name']
+            return vk_ses.method(method='groups.getById', values={'group_id': id_or_message_tmp['from_id']})[0]['name']
+    return vk_ses.method(method='groups.getById', values={'group_ids':  id_or_message_tmp})[0]['name']
 
 
 def returnConfMembers() -> dict:
@@ -512,4 +513,4 @@ while True:
             print('Hard Restarting...', datetime.now())
             raise Exception('Restart')
         Counters['ExceptionFalls'] += 1
-        print('Exception, restarting.' + str(datetime.now().strftime('%d.%m.%Y-%H:%M:%S')), sys.exc_info(), sep='\n')
+        print('Exception, restarting.',  str(datetime.now().strftime('%d.%m.%Y-%H:%M:%S')), sys.exc_info(), sep='\n')
