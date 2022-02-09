@@ -47,6 +47,22 @@ BotMessages = {
                       'ЯМЕТЕ КУДАСААИИ~!! АХхх~~~! Притормози Сенпай! Ну че, как подрочил, уебок?',
                       'Жди.'],
     'ping_message': ['Pinging @all [127.0.0.1] with 32 bytes of data:', ''],
+    #'invite_message': ['Новеньких ебем.', 'Добро пожаловать, хули.', 'Здесь пидорасов не любят, ливни.',
+    #                   'Ещё один... Как же вы меня заебали.', 'Нахуй он тут нужен?', 'Инвайтнули. Ну и хуй с ним.'],
+    'link_invite_message': ['Новеньких ебем.', 'Добро пожаловать, хули.', 'Здесь пидорасов не любят, ливни.',
+                       'Ещё один... Как же вы меня заебали.', 'Нахуй он тут нужен?', 'Зашел. Ну и хуй с ним.'],
+    #'leave_message': ['Ну и катись отсюда.', 'Ахах, вышел, порвался видимо.', 'До новых встреч.',
+    #                  'Ливнул. Ну и хуй с ним.'],
+    #'returned_message': ['Ахаха. Нахуй ты вернулся сюда?', 'Добро пожаловать. Снова.',
+    #                     'Нахуя ливал?', 'Очко зашил, после последнего лива?', 'Вернулся. Ну и хуй с ним.'],
+    #'kick_message': ['Наконец-то кикнули этого пидораса.', 'Может ещё пол-конфы таких-же кикнешь?',
+    #                 'Слава богу он больше не с нами.', '...И он никогда не вернется сюда.',
+    #                 'Кикнули. Ну и хуй с ним.'],
+    'multikick_message': ['Пусть катится отсюда.', 'Минус один. Ну и хуй с ним.', 'Слава богу он больше не с нами.',
+                          '...И он никогда не вернется сюда.', 'До новых встреч.', 'Аззаазха. Он пошел очко зашивать.'],
+    'multiinvite_message': ['Новеньких ебем.', 'Добро пожаловать, хули.', 'Здесь пидорасов не любят, ливни.',
+                       'Ещё один... Как же вы меня заебали.', 'Нахуй он тут нужен?', 'Зашел. Ну и хуй с ним.',
+                        'Сап два.. Кхм... Всмысле, Добро пожаловать. Снова.'],
     'help_message': '',
     'debug_message': '',
     'info_message': ''
@@ -72,7 +88,7 @@ AdminIds = {492569185, 384341109, 551709213}
 BannedIds = {}
 
 # Ver
-Ver = "3.4.0a2_5"
+Ver = "3.4.0a2_6"
 
 # Flags
 Flags = {
@@ -89,6 +105,7 @@ Timings = {
     'XyiGet': {'Request': datetime.now(), 'Delay': timedelta(seconds=5)},
     'PingGet': {'Request': datetime.now(), 'Delay': timedelta(minutes=5)},
     'HelpGet': {'Request': datetime.now(), 'Delay': timedelta(seconds=10)},
+    'ConfUserStatusGet': {'Request': datetime.now(), 'Delay': timedelta(seconds=1)}
 }
 Started = datetime.now()
 
@@ -295,7 +312,7 @@ def getLeetText(text_tmp) -> str:
     for k in range(len(text_tmp)):
         if text_tmp[k] in dic:
             text_tmp[k] = random.choice(list(dic[text_tmp[k]]))
-    text_tmp = ' '.join(text_tmp)
+    text_tmp = ''.join(text_tmp)
     if len(text_tmp) > Limits['LeetGet']['Answer']:
         text_tmp = text_tmp[:Limits['LeetGet']['Answer'] + 1]
     return text_tmp
@@ -324,11 +341,23 @@ while True:
     try:
         for event in vk_lp.listen():
             if event.type == VkBotEventType.MESSAGE_NEW and event.from_chat:
+
                 message = event.message
 
-                if not isTextExist(message):
-                    continue
                 if Flags['isDisabled'] and not (message['from_id'] in AdminIds):
+                    continue
+
+                if 'action' in message.keys():
+                    if not checkTimings('ConfUserStatusGet'):
+                        continue
+                    if message['action']['type'] == 'chat_invite_user':
+                        sendMessage(random.choice(BotMessages['multiinvite_message']))
+                    if message['action']['type'] == 'chat_kick_user':
+                        sendMessage(random.choice(BotMessages['multikick_message']))
+                    if message['action']['type'] == 'chat_invite_user_by_link':
+                        sendMessage(random.choice(BotMessages['link_invite_message']))
+
+                if not isTextExist(message):
                     continue
 
                 # Split by ' ' for parsing requests
